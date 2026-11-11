@@ -17,4 +17,7 @@ epoch=${SOURCE_DATE_EPOCH:-0}
 [[ $epoch =~ ^[0-9]+$ ]] || exit 1
 tar --sort=name --mtime="@$epoch" --owner=0 --group=0 --numeric-owner -czf "dist/modsecurity-$version.tar.gz" -C "$stage" modsecurity
 (cd dist && sha256sum "modsecurity-$version.tar.gz" > "modsecurity-$version.tar.gz.sha256")
+cp scripts/install.sh scripts/deploy-remote.sh dist/
+chmod 755 dist/install.sh dist/deploy-remote.sh
+(cd dist && sha256sum install.sh > install.sh.sha256 && sha256sum deploy-remote.sh > deploy-remote.sh.sha256)
 printf 'Built dist/modsecurity-%s.tar.gz\n' "$version"

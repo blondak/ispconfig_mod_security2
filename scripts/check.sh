@@ -11,3 +11,4 @@ php tests/template.php "$source_dir"
 while IFS= read -r -d '' file; do php -l "$file" >/dev/null; done < <(find modsecurity tests -name '*.php' -print0)
 for file in scripts/*.sh; do bash -n "$file"; done
 ./scripts/package-release.sh
+bash tests/installer.sh

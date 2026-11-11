@@ -42,6 +42,8 @@ A server change regenerates its affected snippets and performs one configtest/re
 
 ## Installation
 
+The [online installer](docs/INSTALLATION.md) can download, verify and install a published release automatically. For manual installation:
+
 1. Use ISPConfig **3.3.3p2** on the master and target web nodes. Back up the databases and Apache configuration.
 2. Extract `modsecurity-0.1.0.tar.gz` into `/usr/local/ispconfig/extensions/` on the master and all target web nodes. The resulting directory must be `/usr/local/ispconfig/extensions/modsecurity/`.
 3. Run as root, **master first, then web nodes**:
@@ -75,6 +77,7 @@ Raw lines, client IPs, referers and request bodies are not copied into the snaps
 
 ## Documentation
 
+- [Online installation and updates](docs/INSTALLATION.md): verified downloads and installation on each node.
 - [Releases and automatic deployment](docs/DEPLOYMENT.md): GitHub Actions, release publishing, SSH configuration and recovery.
 - [Development and testing](docs/DEVELOPMENT.md): local checks, the two-node lab and release packaging.
 

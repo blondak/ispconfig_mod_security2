@@ -28,6 +28,11 @@ jobs:
           docker compose -f tests/setup/compose.yaml run --rm --no-deps --entrypoint php server1 /lab/smoke.php
           docker compose -f tests/setup/compose.yaml run --rm --no-deps --entrypoint php server1 /lab/server_settings.php
           docker compose -f tests/setup/compose.yaml run --rm --no-deps --entrypoint php server1 /lab/stale_session.php
+      - name: Online installer integration
+        run: |
+          docker compose -f tests/setup/compose.yaml cp scripts/install.sh server1:/tmp/modsecurity-install.sh
+          docker compose -f tests/setup/compose.yaml cp dist server1:/tmp/modsecurity-release
+          docker compose -f tests/setup/compose.yaml exec -T server1 bash /lab/install_online.sh /tmp/modsecurity-install.sh /tmp/modsecurity-release
       - name: Lab logs on failure
         if: failure()
         run: docker compose -f tests/setup/compose.yaml logs --tail=100

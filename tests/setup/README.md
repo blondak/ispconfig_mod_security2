@@ -29,6 +29,8 @@ docker compose run --rm --no-deps --entrypoint php server1 /lab/server_settings.
 docker compose run --rm --no-deps --entrypoint php server1 /lab/stale_session.php
 ```
 
+CI additionally copies the release assets and `scripts/install.sh` into server1 and runs `install_online.sh` there. It supplies fixture GitHub responses and performs real installation/recovery in that disposable node.
+
 Run these in order. The server test uses configurations saved by the smoke test. It verifies different server modes with actual XSS requests, then restores inherited server defaults. The session regression modifies only a session created by that test.
 
 This lab covers extension components rather than a complete hosting installation. It does not run mail, DNS or FTP daemons or general hosting provisioning plugins. DNS server metadata exists so native client Limits selectors validate. Vhosts are created by the fixture. The systemctl adapter performs a real Apache graceful reload; use a VM for full systemd/provisioning tests.

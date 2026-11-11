@@ -3,7 +3,7 @@
 All automation uses **GitHub Actions**:
 
 1. Push a version tag matching `modsecurity/VERSION`, e.g. `v0.1.0`.
-2. The release workflow runs unit checks, Apache/CRS tests and the two-node ISPConfig lab. It packages the extension and creates a **draft GitHub Release** with the archive and SHA-256 checksum.
+2. The release workflow runs unit checks, Apache/CRS tests and the two-node ISPConfig lab. It packages the extension and creates a **draft GitHub Release** with the archive, online installer, deployment backend and SHA-256 checksums.
 3. Review the draft and **publish it in GitHub**. Publishing a stable release automatically deploys its attached package when deployment is configured. Pre-releases are not deployed.
 
 Assets are attached before publication. The deployment uses the Release assets, checks their checksum, then updates the master followed by web nodes. GitHub documents the [`release: published` event](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#release) and [token-triggered workflow restrictions](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow); publish the generated draft through GitHub so the deployment event is emitted.
@@ -23,3 +23,5 @@ Targets need Bash, PHP CLI with extension dependencies, GNU tar, sha256sum, floc
 The deployer stages and lints the package, preserves `dbversion`, backs up previous code, runs the local installer/update and checks Apache configuration. On failure it attempts to restore previous code. Database migrations are not reversed automatically. Deployment stops at the first failed node; earlier nodes retain the deployed release. Initial installation still requires website Resync in ISPConfig.
 
 The **Deploy published release** workflow also accepts an existing published tag through **Run workflow** for retries. No remote credentials are stored in this repository. The workflows have been prepared and locally checked; running them on GitHub requires pushing the repository and configuring deployment.
+
+For installation without an Actions deployment, use the [online installer](INSTALLATION.md).

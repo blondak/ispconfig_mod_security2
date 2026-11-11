@@ -32,7 +32,7 @@ jobs:
           version=${RELEASE_TAG#v}
           if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
             test "$(gh release view "$RELEASE_TAG" --json isDraft --jq .isDraft)" = true
-            gh release upload "$RELEASE_TAG" "dist/modsecurity-$version.tar.gz" "dist/modsecurity-$version.tar.gz.sha256" --clobber
+            gh release upload "$RELEASE_TAG" "dist/modsecurity-$version.tar.gz" "dist/modsecurity-$version.tar.gz.sha256" dist/install.sh dist/install.sh.sha256 dist/deploy-remote.sh dist/deploy-remote.sh.sha256 --clobber
           else
-            gh release create "$RELEASE_TAG" "dist/modsecurity-$version.tar.gz" "dist/modsecurity-$version.tar.gz.sha256" --verify-tag --draft --title "$RELEASE_TAG" --generate-notes
+            gh release create "$RELEASE_TAG" "dist/modsecurity-$version.tar.gz" "dist/modsecurity-$version.tar.gz.sha256" dist/install.sh dist/install.sh.sha256 dist/deploy-remote.sh dist/deploy-remote.sh.sha256 --verify-tag --draft --title "$RELEASE_TAG" --generate-notes
           fi

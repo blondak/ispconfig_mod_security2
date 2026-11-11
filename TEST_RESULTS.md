@@ -46,6 +46,12 @@ Built the 0.1.0 archive and checksum and executed `scripts/deploy-remote.sh` ins
 
 A separate fixture package deliberately threw during installer enable. Deployment returned failure and restored the previous code and extension files. No production deployment was performed. The complete GitHub event/SSH transport path still requires a configured repository and deployment credentials.
 
+## Online installer
+
+`tests/installer.sh`: **14 fixture checks** passed, covering latest/pinned release resolution, stdin invocation with arguments, HTTPS-only requests, invalid arguments, tampered archive/backend checksums, unsafe checksum filenames, multiple entries, draft/pre-release rejection, version mismatch and unavailable releases. No real network requests are used.
+
+`tests/setup/install_online.sh`: **3 checks in the disposable lab node** passed: installation through the online entry point with schema-marker preservation, downgrade rejection, and working-code recovery after a deliberately broken installer. GitHub responses and downloads are supplied by local fixtures; no public release was created or downloaded.
+
 ## Scope and remaining coverage
 
 The lab provisions fixture vhosts instead of running the full hosting stack. Mail/DNS/FTP daemons and systemd are excluded; the systemctl adapter performs a real Apache graceful reload. Full operating-system provisioning/upgrades need a VM.
