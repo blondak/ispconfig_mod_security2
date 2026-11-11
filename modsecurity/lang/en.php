@@ -136,4 +136,8 @@ return [
     'allow_website_overrides'=>'Allow websites to override the mode and disable protection for URLs',
     'server_help'=>'These settings apply to the selected Apache server. Inherit keeps the existing Apache configuration. On blocks, Detection only logs, and Off stops rule evaluation. Unless website overrides are allowed, the server mode takes precedence over saved website modes and URL disabling. Limits are defaults for websites without a custom limit.',
     'server_mode_forced'=>'The server controls the mode and URL disabling. Website values are retained but do not take effect.',
+    'regex'=>'Regular expression',
+    'regex_help'=>'Enter a regex without delimiters, starting with ^/, e.g. ^/livewire-[a-fA-F0-9]+/update$. End with $ to match the whole path. Maximum 1024 ASCII characters, without whitespace or double quotes. The phase 2 limitation also applies to regex.',
+    'invalid_regex_path'=>'Regex must start with ^/, contain at most 1024 ASCII characters and have no whitespace or double quotes. Do not include delimiters.',
+    'invalid_regex_syntax'=>'Invalid regular expression syntax.',
 ];

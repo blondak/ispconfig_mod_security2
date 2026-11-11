@@ -4,6 +4,9 @@ use IspModsecurity\Config;
 $c=Config::defaults();
 $c['mode']='On';$c['body_limit']=41943040;$c['nofiles_limit']=41943040;
 $c['exceptions']=[['scope'=>'prefix','path'=>'/admin/','ids'=>[10001,10002,941100]],['scope'=>'exact','path'=>'/off','off'=>true],['scope'=>'exact','path'=>'/exact','ids'=>[10002]]];
+$c['exceptions'][]=['scope'=>'regex','path'=>'^/livewire-[a-fA-F0-9]+/update$','ids'=>[10001,10002]];
+$c['exceptions'][]=['scope'=>'regex','path'=>'^/v\\d+/item\\.\\d+$','ids'=>[10002]];
+$c['exceptions'][]=['scope'=>'regex','path'=>'^/regex-off-[0-9]+$','off'=>true];
 file_put_contents('/etc/apache2/test-managed.conf',Config::render($c));
 
 foreach(['Off','DetectionOnly'] as $mode) {

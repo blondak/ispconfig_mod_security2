@@ -136,4 +136,8 @@ return [
     'allow_website_overrides'=>'Povolit webům vlastní režim a vypnutí pro URL',
     'server_help'=>'Toto nastavení platí pro vybraný Apache server. Zdědit ponechá stávající konfiguraci Apache. Zapnuto blokuje, Pouze detekce jen zaznamenává, Vypnuto zastaví vyhodnocování. Pokud nepovolíte vlastní režim webů, režim serveru má přednost i před dříve uloženými režimy a vypnutím pro URL. Limity jsou výchozí hodnoty pro weby bez vlastního limitu.',
     'server_mode_forced'=>'Režim a vypnutí pro URL řídí nastavení serveru. Vlastní hodnoty zůstávají uložené, ale neuplatňují se.',
+    'regex'=>'Regulární výraz',
+    'regex_help'=>'Regex zadejte bez oddělovačů, začínající ^/, např. ^/livewire-[a-fA-F0-9]+/update$. Pro shodu celé cesty použijte na konci $. Nejvýše 1024 ASCII znaků, bez bílých znaků a dvojitých uvozovek. Omezení fáze 2 platí i pro regex.',
+    'invalid_regex_path'=>'Regex musí začínat ^/, mít nejvýše 1024 ASCII znaků a nesmí obsahovat bílé znaky ani dvojité uvozovky. Zadejte ho bez oddělovačů.',
+    'invalid_regex_syntax'=>'Neplatná syntaxe regulárního výrazu.',
 ];

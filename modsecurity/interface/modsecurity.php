@@ -83,5 +83,5 @@ foreach(['body_limit'=>\IspModsecurity\I18n::t('body_limit'),'nofiles_limit'=>\I
     $vars['policy_limits'][]=['name'=>'max_'.$key,'label'=>\IspModsecurity\I18n::t('maximum').$label,'value'=>$policy['max_'.$key]/1048576];
 }
 $rows=array_merge($c['exceptions'],array_fill(0,2,['scope'=>'exact','path'=>'','ids'=>[],'off'=>false,'note'=>'']));
-foreach($rows as $index=>$r) $vars['exceptions'][]=['index'=>$index,'site'=>$r['scope']==='site','exact'=>$r['scope']==='exact','prefix'=>$r['scope']==='prefix','path'=>$r['path'],'ids'=>implode(' ',$r['ids']),'off'=>$r['off'],'note'=>$r['note'],'allow_disable'=>$admin || $policy['allow_disable']];
+foreach($rows as $index=>$r) $vars['exceptions'][]=['index'=>$index,'site'=>$r['scope']==='site','exact'=>$r['scope']==='exact','prefix'=>$r['scope']==='prefix','regex'=>$r['scope']==='regex','path'=>$r['path'],'ids'=>implode(' ',$r['ids']),'off'=>$r['off'],'note'=>$r['note'],'allow_disable'=>$admin || $policy['allow_disable']];
 \IspModsecurity\View::render('settings',$web,$webs,$vars);

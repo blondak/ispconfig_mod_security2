@@ -11,14 +11,24 @@ The extension adds native tabs without modifying ISPConfig core templates. Its U
 Open **Sites → Websites → website → ModSecurity**. The Settings and Diagnostics subtabs share the normal ISPConfig content area.
 
 - Inherit, On, Detection only and Off modes.
-- `SecRuleRemoveById` for a whole website, an exact URL path or a path prefix ending in `/`. Enter multiple IDs separated by spaces or commas.
+- `SecRuleRemoveById` for a whole website, an exact URL path, a path prefix ending in `/`, or a regular expression. Enter multiple IDs separated by spaces or commas.
 - Disable protection for a URL, subject to administrator permission.
 - Request-body limits including/excluding files, in MiB. Each **Override limit** checkbox enables a custom value. Unchecked means inheritance. PHP settings are unchanged.
 - Desired and applied revisions, application status and errors. A saved change reaches Apache through the ISPConfig server queue, after a successful configuration test and reload.
 
 **URL exceptions apply from phase 2. Global phase 1 rules run earlier.** Whole-site mode and rule exclusions also cover phase 1. Exceptions are additive: a narrow exception cannot restore a rule removed by a broader one.
 
-Paths accept a restricted ASCII subset starting with `/`, without query strings, percent encoding, whitespace or `..`. The generator creates anchored regular expressions. Method/parameter exclusions and importing arbitrary Apache directives are outside this version's scope.
+Exact paths and prefixes accept a restricted ASCII subset starting with `/`, without query strings, percent encoding, whitespace or `..`. The generator escapes these as literal paths.
+
+For dynamic paths, choose **Regular expression** and enter a PCRE pattern without delimiters, starting with `^/`. For example:
+
+```regex
+^/livewire-[a-fA-F0-9]+/update$
+```
+
+The trailing `$` matches the end of the path; without it the expression may also match a longer path. Expressions allow at most 1024 printable ASCII characters, without whitespace or double quotes. Invalid syntax is rejected before saving. Apache configtest remains the final check and restores the last working files on failure. Regex URL disabling follows the same administrator/server policy and phase 2 limitation as exact/prefix exceptions. Update the master and target web nodes before using the new scope.
+
+Method/parameter exclusions and importing arbitrary Apache directives are outside this version's scope.
 
 ## Client permissions
 
@@ -41,6 +51,8 @@ Server defaults are loaded in Apache's main configuration, so other virtualhosts
 A server change regenerates its affected snippets and performs one configtest/reload. Failure restores the previous files together. Server application status is tracked separately from website revisions.
 
 ## Installation
+
+Use PHP 8.2 for the panel and the ISPConfig worker/CLI. The extension uses PHP 8 features; the panel CGI/FPM interpreter can differ from the command-line default.
 
 The [online installer](docs/INSTALLATION.md) can download, verify and install a published release automatically. For manual installation:
 

@@ -136,4 +136,8 @@ return [
     'allow_website_overrides'=>'Websites dürfen den Modus überschreiben und den Schutz für URLs deaktivieren',
     'server_help'=>'Diese Einstellungen gelten für den ausgewählten Apache-Server. Übernehmen behält die vorhandene Apache-Konfiguration bei. Ein blockiert, Nur Erkennung protokolliert, Aus beendet die Regelauswertung. Ohne Website-Überschreibungen hat der Servermodus Vorrang vor gespeicherten Website-Modi und URL-Deaktivierungen. Limits sind Standardwerte für Websites ohne eigenes Limit.',
     'server_mode_forced'=>'Der Server steuert den Modus und URL-Deaktivierungen. Website-Werte bleiben gespeichert, werden aber nicht angewendet.',
+    'regex'=>'Regulärer Ausdruck',
+    'regex_help'=>'Regex ohne Trennzeichen eingeben, beginnend mit ^/, z. B. ^/livewire-[a-fA-F0-9]+/update$. Für den vollständigen Pfad mit $ abschließen. Höchstens 1024 ASCII-Zeichen, ohne Leerraum oder doppelte Anführungszeichen. Die Einschränkung auf Phase 2 gilt auch für Regex.',
+    'invalid_regex_path'=>'Regex muss mit ^/ beginnen, darf höchstens 1024 ASCII-Zeichen und keinen Leerraum oder doppelte Anführungszeichen enthalten. Keine Trennzeichen angeben.',
+    'invalid_regex_syntax'=>'Ungültige Syntax des regulären Ausdrucks.',
 ];

@@ -26,6 +26,7 @@ Websites: http://127.0.0.1:18081 and http://127.0.0.1:18082, using Host headers 
 ```sh
 docker compose exec -T server1 php /lab/panel_runtime.php
 docker compose exec -T server1 php /lab/smoke.php
+docker compose exec -T server1 php /lab/regex_settings.php
 docker compose exec -T server1 php /lab/server_settings.php
 docker compose exec -T server1 php /lab/stale_session.php
 ```

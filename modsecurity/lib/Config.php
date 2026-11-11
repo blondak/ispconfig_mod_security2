@@ -19,9 +19,10 @@ final class Config {
         if (!is_array($c['exceptions']) || count($c['exceptions']) > 100) throw new \InvalidArgumentException(\IspModsecurity\I18n::t('too_many_exceptions'));
         $rows=[];
         foreach ($c['exceptions'] as $r) {
-            if (!is_array($r) || !in_array($r['scope'] ?? '', ['site','exact','prefix'], true)) throw new \InvalidArgumentException(\IspModsecurity\I18n::t('invalid_scope'));
+            if (!is_array($r) || !in_array($r['scope'] ?? '', ['site','exact','prefix','regex'], true)) throw new \InvalidArgumentException(\IspModsecurity\I18n::t('invalid_scope'));
             $path = (string)($r['path'] ?? '');
-            if ($r['scope'] !== 'site' && (!preg_match('#^/[A-Za-z0-9_./~+@=-]*$#D', $path) || strlen($path)>1024 || str_contains($path,'..') || str_contains($path,'%'))) throw new \InvalidArgumentException(\IspModsecurity\I18n::t('invalid_path'));
+            if ($r['scope'] === 'regex') self::validateRegex($path);
+            if (in_array($r['scope'], ['exact','prefix'], true) && (!preg_match('#^/[A-Za-z0-9_./~+@=-]*$#D', $path) || strlen($path)>1024 || str_contains($path,'..') || str_contains($path,'%'))) throw new \InvalidArgumentException(\IspModsecurity\I18n::t('invalid_path'));
             if ($r['scope']==='prefix' && !str_ends_with($path,'/')) throw new \InvalidArgumentException(\IspModsecurity\I18n::t('invalid_prefix'));
             $off = !empty($r['off']);
             if ($off && (!$admin && empty($policy['allow_disable']))) throw new \InvalidArgumentException(\IspModsecurity\I18n::t('url_disable_denied'));
@@ -34,6 +35,16 @@ final class Config {
         }
         return ['mode'=>$c['mode'],'body_limit'=>$c['body_limit'],'nofiles_limit'=>$c['nofiles_limit'],'exceptions'=>$rows];
     }
+    private static function validateRegex(string $pattern): void {
+        if(strlen($pattern)>1024 || !str_starts_with($pattern,'^/') || preg_match('/[^\x21-\x7e]|"/',$pattern)) {
+            throw new \InvalidArgumentException(I18n::t('invalid_regex_path'));
+        }
+        // A control-character delimiter cannot occur in an accepted pattern, so no
+        // delimiter escaping can change the expression being checked for Apache.
+        if(@preg_match("\x01".$pattern."\x01",'')===false) {
+            throw new \InvalidArgumentException(I18n::t('invalid_regex_syntax'));
+        }
+    }
     public static function render(array $c): string {
         $c=self::validate($c,[],true);
         $out="# Managed by ISPConfig ModSecurity extension\n<IfModule security2_module>\n";
@@ -44,7 +55,8 @@ final class Config {
         foreach($c['exceptions'] as $r) {
             $indent='    ';
             if($r['scope']!=='site') {
-                $pattern='^'.preg_quote($r['path'],'#').($r['scope']==='exact'?'$':'');
+                // Apache consumes escaped backslashes inside quoted arguments.
+                $pattern=$r['scope']==='regex' ? str_replace('\\','\\\\',$r['path']) : '^'.preg_quote($r['path'],'#').($r['scope']==='exact'?'$':'');
                 $out.='    <LocationMatch "'.$pattern.'">'."\n"; $indent.='    ';
             }
             $out.=$indent.($r['off']?'SecRuleEngine Off':'SecRuleRemoveById '.implode(' ',$r['ids']))."\n";
