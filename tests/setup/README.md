@@ -24,9 +24,9 @@ In Diagnostics, request collection and refresh after a few seconds. Seed logs co
 Websites: http://127.0.0.1:18081 and http://127.0.0.1:18082, using Host headers `web1.lab.test` / `web2.lab.test`. Actual CRS rules can generate additional blocks.
 
 ```sh
-docker compose run --rm --no-deps --entrypoint php server1 /lab/smoke.php
-docker compose run --rm --no-deps --entrypoint php server1 /lab/server_settings.php
-docker compose run --rm --no-deps --entrypoint php server1 /lab/stale_session.php
+docker compose exec -T server1 php /lab/smoke.php
+docker compose exec -T server1 php /lab/server_settings.php
+docker compose exec -T server1 php /lab/stale_session.php
 ```
 
 CI additionally copies the release assets and `scripts/install.sh` into server1 and runs `install_online.sh` there. It supplies fixture GitHub responses and performs real installation/recovery in that disposable node.

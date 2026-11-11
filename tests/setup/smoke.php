@@ -1,5 +1,5 @@
 <?php
-// Run in a disposable app container on the Compose network; test credentials only.
+// Run in the disposable lab server1 container; test credentials only.
 require __DIR__.'/http.php';
 $anon=new Browser();[$code]=$anon->request('/sites/modsecurity_diagnostics.php?domain_id=1');expect($code===302,'anonymous diagnostic access denied');
 $admin=new Browser();$admin->login('admin','Admin-Lab-123!');

@@ -8,9 +8,9 @@ docker run --rm ispconfig-modsecurity-test
 
 cd tests/setup
 docker compose up -d --build
-docker compose run --rm --no-deps --entrypoint php server1 /lab/smoke.php
-docker compose run --rm --no-deps --entrypoint php server1 /lab/server_settings.php
-docker compose run --rm --no-deps --entrypoint php server1 /lab/stale_session.php
+docker compose exec -T server1 php /lab/smoke.php
+docker compose exec -T server1 php /lab/server_settings.php
+docker compose exec -T server1 php /lab/stale_session.php
 ```
 
 The disposable [two-node lab](../tests/setup/README.md) provides an administrator, two clients, two websites and actual queue replication. It runs the components needed by this extension; full mail/DNS/FTP provisioning and systemd require separate VM testing. See [TEST_RESULTS.md](../TEST_RESULTS.md) for completed checks and remaining coverage.

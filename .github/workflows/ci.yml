@@ -27,9 +27,9 @@ jobs:
       - name: Two-node ISPConfig lab
         run: |
           docker compose -f tests/setup/compose.yaml up -d --build --wait --wait-timeout 180
-          docker compose -f tests/setup/compose.yaml run --rm --no-deps --entrypoint php server1 /lab/smoke.php
-          docker compose -f tests/setup/compose.yaml run --rm --no-deps --entrypoint php server1 /lab/server_settings.php
-          docker compose -f tests/setup/compose.yaml run --rm --no-deps --entrypoint php server1 /lab/stale_session.php
+          docker compose -f tests/setup/compose.yaml exec -T server1 php /lab/smoke.php
+          docker compose -f tests/setup/compose.yaml exec -T server1 php /lab/server_settings.php
+          docker compose -f tests/setup/compose.yaml exec -T server1 php /lab/stale_session.php
       - name: Online installer integration
         run: |
           docker compose -f tests/setup/compose.yaml cp scripts/install.sh server1:/tmp/modsecurity-install.sh
