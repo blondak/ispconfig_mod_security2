@@ -1,6 +1,6 @@
 <?php
-require_once '/usr/local/ispconfig/extensions/modsecurity/lib/I18n.php';
-require_once '/usr/local/ispconfig/extensions/modsecurity/lib/Access.php';
+require_once ISPC_LIB_PATH.'/modsecurity/lib/I18n.php';
+require_once ISPC_LIB_PATH.'/modsecurity/lib/Access.php';
 class modsecurity_client_plugin {
     public function onLoad() {
         global $app;

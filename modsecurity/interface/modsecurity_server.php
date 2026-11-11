@@ -1,8 +1,8 @@
 <?php
 require_once '../../lib/config.inc.php';
 require_once '../../lib/app.inc.php';
-require_once '/usr/local/ispconfig/extensions/modsecurity/lib/ServerConfig.php';
-require_once '/usr/local/ispconfig/extensions/modsecurity/lib/Store.php';
+require_once ISPC_LIB_PATH.'/modsecurity/lib/ServerConfig.php';
+require_once ISPC_LIB_PATH.'/modsecurity/lib/Store.php';
 use IspModsecurity\I18n;
 use IspModsecurity\ServerConfig;
 $app->auth->check_module_permissions('admin');

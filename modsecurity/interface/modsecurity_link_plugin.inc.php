@@ -12,7 +12,7 @@ class modsecurity_link_plugin {
         if(($_SESSION['s']['module']['name']??'')!=='sites') return;
         $module=$_SESSION['s']['module'];
         $module['nav']=array_values(array_filter($module['nav']??[],fn($nav)=>($nav['title']??'')!=='ModSecurity'));
-        include '/usr/local/ispconfig/extensions/modsecurity/interface/modsecurity_menu.php';
+        include ISPC_WEB_PATH.'/sites/lib/menu.d/modsecurity.menu.php';
         $_SESSION['s']['module']=$module;
     }
     public function link($event,$data) {

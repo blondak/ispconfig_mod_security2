@@ -24,12 +24,15 @@ In Diagnostics, request collection and refresh after a few seconds. Seed logs co
 Websites: http://127.0.0.1:18081 and http://127.0.0.1:18082, using Host headers `web1.lab.test` / `web2.lab.test`. Actual CRS rules can generate additional blocks.
 
 ```sh
+docker compose exec -T server1 php /lab/panel_runtime.php
 docker compose exec -T server1 php /lab/smoke.php
 docker compose exec -T server1 php /lab/server_settings.php
 docker compose exec -T server1 php /lab/stale_session.php
 ```
 
 CI additionally copies the release assets and `scripts/install.sh` into server1 and runs `install_online.sh` there. It supplies fixture GitHub responses and performs real installation/recovery in that disposable node.
+
+The panel vhost enables a production-like `open_basedir` that excludes the extension source directory. `panel_runtime.php` checks normal first login and initial rendering from Dashboard, Sites and System start modules.
 
 Run these in order. The server test uses configurations saved by the smoke test. It verifies different server modes with actual XSS requests, then restores inherited server defaults. The session regression modifies only a session created by that test.
 

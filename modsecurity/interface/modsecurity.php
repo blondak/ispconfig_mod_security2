@@ -1,12 +1,12 @@
 <?php
-require_once '/usr/local/ispconfig/extensions/modsecurity/lib/I18n.php';
 require_once '../../lib/config.inc.php';
 require_once '../../lib/app.inc.php';
-require_once '/usr/local/ispconfig/extensions/modsecurity/lib/Config.php';
-require_once '/usr/local/ispconfig/extensions/modsecurity/lib/Store.php';
-require_once '/usr/local/ispconfig/extensions/modsecurity/lib/View.php';
-require_once '/usr/local/ispconfig/extensions/modsecurity/lib/Access.php';
-require_once '/usr/local/ispconfig/extensions/modsecurity/lib/ServerConfig.php';
+require_once ISPC_LIB_PATH.'/modsecurity/lib/I18n.php';
+require_once ISPC_LIB_PATH.'/modsecurity/lib/Config.php';
+require_once ISPC_LIB_PATH.'/modsecurity/lib/Store.php';
+require_once ISPC_LIB_PATH.'/modsecurity/lib/View.php';
+require_once ISPC_LIB_PATH.'/modsecurity/lib/Access.php';
+require_once ISPC_LIB_PATH.'/modsecurity/lib/ServerConfig.php';
 $app->auth->check_module_permissions('sites');
 $app->uses('tform');
 $admin=($_SESSION['s']['user']['typ']??'')==='admin';

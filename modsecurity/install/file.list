@@ -1,3 +1,17 @@
+d:lib:interface/lib/modsecurity
+d:lib:interface/lib/modsecurity/lib
+d:lang:interface/lib/modsecurity/lang
+c:lib/Access.php:interface/lib/modsecurity/lib/Access.php
+c:lib/Apply.php:interface/lib/modsecurity/lib/Apply.php
+c:lib/Config.php:interface/lib/modsecurity/lib/Config.php
+c:lib/Diagnostics.php:interface/lib/modsecurity/lib/Diagnostics.php
+c:lib/I18n.php:interface/lib/modsecurity/lib/I18n.php
+c:lib/ServerConfig.php:interface/lib/modsecurity/lib/ServerConfig.php
+c:lib/Store.php:interface/lib/modsecurity/lib/Store.php
+c:lib/View.php:interface/lib/modsecurity/lib/View.php
+c:lang/cs.php:interface/lib/modsecurity/lang/cs.php
+c:lang/de.php:interface/lib/modsecurity/lang/de.php
+c:lang/en.php:interface/lib/modsecurity/lang/en.php
 s:server/modsecurity_plugin.inc.php:server/plugins-enabled/modsecurity_plugin.inc.php
 s:server/modsecurity_module.inc.php:server/mods-enabled/modsecurity_module.inc.php
 c:interface/modsecurity.php:interface/web/sites/modsecurity.php

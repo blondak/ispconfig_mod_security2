@@ -52,6 +52,14 @@ A separate fixture package deliberately threw during installer enable. Deploymen
 
 `tests/setup/install_online.sh`: **3 checks in the disposable lab node** passed: installation through the online entry point with schema-marker preservation, downgrade rejection, and working-code recovery after a deliberately broken installer. GitHub responses and downloads are supplied by local fixtures; no public release was created or downloaded.
 
+## Restricted panel filesystem regression
+
+Reproduced the reported sequence with `open_basedir` excluding `/usr/local/ispconfig/extensions`: the first normal login returned HTTP 500, a subsequent panel request succeeded, and `/admin/modsecurity.php` returned HTTP 500. Apache logged failed includes of I18n.php and ServerConfig.php outside the allowed tree.
+
+The installer now copies panel libraries and translations into `interface/lib/modsecurity`, using regular files rather than symlinks. UI controllers, menu providers and plugins load only those copies. Individual copy entries refresh file timestamps for PHP OPcache update detection; worker libraries remain in the root-owned extension directory.
+
+`tests/setup/panel_runtime.php`: **23 assertions** passed with the restriction enabled, covering runtime isolation and normal first login/full panel/server/website rendering for Dashboard, Sites and System start modules. The existing **88 website**, **29 server** and **8 session** assertions also passed under the restricted panel configuration. The lab now enables this restriction by default so CI covers this deployment condition.
+
 ## Scope and remaining coverage
 
 The lab provisions fixture vhosts instead of running the full hosting stack. Mail/DNS/FTP daemons and systemd are excluded; the systemctl adapter performs a real Apache graceful reload. Full operating-system provisioning/upgrades need a VM.

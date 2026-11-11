@@ -24,6 +24,8 @@ cat > /etc/apache2/sites-available/ispconfig.vhost <<'EOF'
  ServerName 127.0.0.1
  DocumentRoot /usr/local/ispconfig/interface/web
  SecRuleEngine Off
+ # Mirror a restricted production panel: UI code must stay within interface.
+ php_admin_value open_basedir "/usr/local/ispconfig/interface:/usr/local/ispconfig/security:/usr/share:/tmp"
  <Directory /usr/local/ispconfig/interface/web>
   Require all granted
   AllowOverride All

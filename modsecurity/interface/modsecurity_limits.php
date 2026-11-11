@@ -1,5 +1,5 @@
 <?php
-require_once '/usr/local/ispconfig/extensions/modsecurity/lib/I18n.php';
+require_once ISPC_LIB_PATH.'/modsecurity/lib/I18n.php';
 return [
     'extension'=>'modsecurity',
     'min_core'=>'3.3.3p2',

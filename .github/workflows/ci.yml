@@ -27,6 +27,7 @@ jobs:
       - name: Two-node ISPConfig lab
         run: |
           docker compose -f tests/setup/compose.yaml up -d --build --wait --wait-timeout 180
+          docker compose -f tests/setup/compose.yaml exec -T server1 php /lab/panel_runtime.php
           docker compose -f tests/setup/compose.yaml exec -T server1 php /lab/smoke.php
           docker compose -f tests/setup/compose.yaml exec -T server1 php /lab/server_settings.php
           docker compose -f tests/setup/compose.yaml exec -T server1 php /lab/stale_session.php

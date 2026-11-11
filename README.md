@@ -4,7 +4,7 @@
 
 ModSecurity controls and diagnostics integrated into **ISPConfig 3.3.3p2**, targeting **Debian 12, Apache, ModSecurity 2 and OWASP CRS 3.3.4**, including multiserver installations. Version **0.1.0** is the initial release.
 
-The extension adds native tabs without modifying ISPConfig core templates. Its UI follows the ISPConfig account language: **English, German and Czech** (`en`, `de`, `cz`; `cs` is also accepted). Other languages fall back to English. Rule messages from logs remain in their original language.
+The extension adds native tabs without modifying ISPConfig core templates. Its UI follows the ISPConfig account language: **English, German and Czech** (`en`, `de`, `cz`; `cs` is also accepted). Other languages fall back to English. Rule messages from logs remain in their original language. Panel runtime libraries and translations are installed inside `interface/lib/modsecurity`, supporting restricted panel `open_basedir` settings.
 
 ## Website controls
 

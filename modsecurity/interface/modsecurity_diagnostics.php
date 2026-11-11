@@ -1,9 +1,9 @@
 <?php
-require_once '/usr/local/ispconfig/extensions/modsecurity/lib/I18n.php';
 require_once '../../lib/config.inc.php';
 require_once '../../lib/app.inc.php';
-require_once '/usr/local/ispconfig/extensions/modsecurity/lib/Store.php';
-require_once '/usr/local/ispconfig/extensions/modsecurity/lib/View.php';
+require_once ISPC_LIB_PATH.'/modsecurity/lib/I18n.php';
+require_once ISPC_LIB_PATH.'/modsecurity/lib/Store.php';
+require_once ISPC_LIB_PATH.'/modsecurity/lib/View.php';
 $app->auth->check_module_permissions('sites');
 header('Cache-Control: no-store');
 $app->uses('tform');

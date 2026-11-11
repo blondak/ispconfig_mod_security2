@@ -1,5 +1,5 @@
 <?php
-require_once '/usr/local/ispconfig/extensions/modsecurity/lib/I18n.php';
+require_once ISPC_LIB_PATH.'/modsecurity/lib/I18n.php';
 // ISPConfig loads menu.d files in module scope. Pages use the native content pane.
 $module['nav'][] = [
     'title' => 'ModSecurity', 'open' => 1,

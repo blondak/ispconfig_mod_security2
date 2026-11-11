@@ -71,3 +71,9 @@ Repeated installation of the same version is supported. An older version than th
 After the **first installation**, run **Tools → Resync → Websites** in ISPConfig for the target nodes, then sign in again to load the new tabs. Save settings and verify their Applied status after the ISPConfig server queue runs.
 
 The installer does not create a Git tag, publish a release or configure automatic deployments. For GitHub deployment configuration, see [DEPLOYMENT.md](DEPLOYMENT.md). For manual installation, see the [project README](../README.md#installation).
+
+## Repairing an early 0.1.0 installation
+
+The refreshed 0.1.0 package fixes HTTP 500 on the first login and on the server settings page when the panel cannot read the extension source directory. Panel libraries and translations are copied into `/usr/local/ispconfig/interface/lib/modsecurity`; widening `open_basedir` or changing extension-directory permissions is unnecessary.
+
+Run the verified installer again on the panel/master and web nodes using `--version 0.1.0`. Reinstallation keeps database settings. Sign out and sign in again after updating so the panel registers all plugins. If the panel's PHP OPcache has timestamp validation disabled, reload the PHP service serving ISPConfig to load the updated code.
