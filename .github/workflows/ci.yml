@@ -1,0 +1,36 @@
+name: Tests
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_call:
+permissions:
+  contents: read
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: PHP dependencies
+        run: sudo apt-get update && sudo apt-get install -y php-cli php-mbstring php-xml
+      - name: Unit checks and release packaging
+        run: ./scripts/check.sh
+      - name: Apache and CRS integration
+        run: |
+          docker build -f tests/apache/Dockerfile -t ispconfig-modsecurity-test .
+          docker run --rm ispconfig-modsecurity-test
+      - name: Two-node ISPConfig lab
+        run: |
+          docker compose -f tests/setup/compose.yaml up -d --build --wait --wait-timeout 180
+          docker compose -f tests/setup/compose.yaml run --rm --no-deps --entrypoint php server1 /lab/smoke.php
+          docker compose -f tests/setup/compose.yaml run --rm --no-deps --entrypoint php server1 /lab/server_settings.php
+          docker compose -f tests/setup/compose.yaml run --rm --no-deps --entrypoint php server1 /lab/stale_session.php
+      - name: Lab logs on failure
+        if: failure()
+        run: docker compose -f tests/setup/compose.yaml logs --tail=100
+      - name: Stop lab
+        if: always()
+        run: docker compose -f tests/setup/compose.yaml down -v

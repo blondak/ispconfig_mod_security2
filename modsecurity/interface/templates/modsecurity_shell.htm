@@ -1,0 +1,74 @@
+<link rel="stylesheet" href="sites/modsecurity.css">
+<div id="modsecurity-site" data-discard-confirm="{tmpl_var name='ms_discard_changes'}" data-site-id="{tmpl_var name='domain_id'}">
+    <div class="page-header"><h1><tmpl_if name="has_web">{tmpl_var name='ms_website'} · {tmpl_var name='domain'}<tmpl_else>ModSecurity</tmpl_if></h1></div>
+    <tmpl_if name="has_web">
+    <div class="content-tab-wrapper">
+        <ul class="nav nav-tabs">
+            <tmpl_loop name="site_tabs"><li><a href="#" data-load-content="{tmpl_var name='url'}">{tmpl_var name='title'}</a></li></tmpl_loop>
+            <li class="active"><a href="#" data-load-content="{tmpl_var name='settings_url'}">ModSecurity</a></li>
+        </ul>
+        <div class="tab-content"><div class="tab-pane active fade in">
+            <div class="content-tab-wrapper ms-subtab-wrapper">
+            <ul class="nav nav-tabs ms-subtabs" aria-label="ModSecurity">
+                <li<tmpl_if name="settings_active"> class="active"</tmpl_if>><a href="#" data-load-content="{tmpl_var name='settings_url'}">{tmpl_var name='ms_settings'}</a></li>
+                <li<tmpl_if name="diagnostics_active"> class="active"</tmpl_if>><a href="#" data-load-content="{tmpl_var name='diagnostics_url'}">{tmpl_var name='ms_diagnostics'}</a></li>
+            </ul>
+            <div class="ms-subtab-content">
+            <tmpl_if name="error"><div class="alert alert-danger" role="alert">{tmpl_var name='error'}</div></tmpl_if>
+            <tmpl_dyninclude name="ms_content">
+            </div>
+            </div>
+        </div></div>
+    </div>
+    <tmpl_else>
+    <p>{tmpl_var name='ms_select_website_help'}</p>
+    <div class="table-wrapper"><table class="table"><thead class="dark"><tr><th>{tmpl_var name='ms_website'}</th><th></th></tr></thead><tbody>
+        <tmpl_loop name="website_list"><tr><td><a href="#" data-load-content="{tmpl_var name='url'}">{tmpl_var name='domain'}</a></td><td class="text-right"><button type="button" class="btn btn-default formbutton-default" data-load-content="{tmpl_var name='url'}">{tmpl_var name='ms_open'}</button></td></tr></tmpl_loop>
+        <tmpl_unless name="website_list"><tr><td colspan="2">{tmpl_var name='ms_no_websites'}</td></tr></tmpl_unless>
+    </tbody></table></div>
+    </tmpl_if>
+<p class="help-block text-right"><a href="https://buymeacoffee.com/blondak" target="_blank" rel="noopener noreferrer">{tmpl_var name='ms_support'}</a></p>
+</div>
+<script>
+(function() {
+    var root = jQuery('#modsecurity-site');
+    // Never submit these extension fields to the core website controller when leaving the tab.
+    root.find('a[data-load-content], button[data-load-content]').on('click.modsecurity', function(e) {
+        e.preventDefault(); e.stopPropagation();
+        if (root.find('[data-ms-settings]').length && ISPConfig.pageFormChanged && !window.confirm(root.attr('data-discard-confirm'))) return;
+        ISPConfig.loadContent(jQuery(this).attr('data-load-content'));
+    });
+    root.find('[data-ms-client-limits]').on('click.modsecurity', function(e) {
+        e.preventDefault(); e.stopPropagation();
+        if (ISPConfig.pageFormChanged && !window.confirm(root.attr('data-discard-confirm'))) return;
+        ISPConfig.capp('client','client/client_edit.php?id=' + jQuery(this).attr('data-ms-client-limits') + '&next_tab=limits');
+    });
+    root.find('[data-ms-limit-for]').on('change.modsecurity', function() {
+        var toggle = jQuery(this);
+        var field = root.find('#' + toggle.attr('data-ms-limit-for'));
+        field.prop('disabled', !toggle.prop('checked')).prop('required', toggle.prop('checked'));
+        if (toggle.prop('checked')) field.trigger('focus');
+    });
+    root.find('[data-ms-filter]').on('click.modsecurity', function(e) {
+        e.preventDefault();
+        var url = 'sites/modsecurity_diagnostics.php?domain_id=' + root.attr('data-site-id')
+            + '&rule_id=' + encodeURIComponent(root.find('[name="rule_id"]').val())
+            + '&path=' + encodeURIComponent(root.find('[name="path"]').val())
+            + '&blocked=' + (root.find('[name="blocked"]').prop('checked') ? '1' : '0');
+        ISPConfig.loadContent(url);
+    });
+    root.find('[data-ms-add]').on('click.modsecurity', function() {
+        var row = root.find('#ms-exception-rows tr:last').clone();
+        var index = parseInt(row.attr('data-row-index'),10) + 1;
+        row.attr('data-row-index', index);
+        row.find('[name]').each(function() {
+            var input = jQuery(this);
+            input.attr('name',input.attr('name').replace(/\[\d+\]/,'['+index+']'));
+            if(input.is('select')) input.val('exact');
+            else if(input.is(':checkbox')) input.prop('checked',false);
+            else input.val('');
+        });
+        root.find('#ms-exception-rows').append(row);
+    });
+})();
+</script>

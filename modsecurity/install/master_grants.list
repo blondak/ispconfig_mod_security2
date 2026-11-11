@@ -1,0 +1,6 @@
+modsecurity_config:SELECT,DELETE
+modsecurity_status:SELECT,INSERT,UPDATE,DELETE
+modsecurity_diagnostic_request:SELECT,DELETE
+modsecurity_diagnostic_result:SELECT,INSERT,UPDATE,DELETE
+modsecurity_server_config:SELECT,DELETE
+modsecurity_server_status:SELECT,INSERT,UPDATE,DELETE

@@ -1,0 +1,18 @@
+<input type="hidden" name="domain_id" value="{tmpl_var name='domain_id'}">
+<input type="hidden" name="_csrf_id" value="{tmpl_var name='csrf_id'}">
+<input type="hidden" name="_csrf_key" value="{tmpl_var name='csrf_key'}">
+<div class="alert alert-{tmpl_var name='status_class'} ms-status-bar" role="status"><span>{tmpl_var name='ms_status'} <strong>{tmpl_var name='status_label'}</strong><tmpl_if name="collected_at"> · {tmpl_var name='ms_last_collection'} {tmpl_var name='collected_at'}</tmpl_if></span> <button type="button" class="btn btn-default btn-sm" data-load-content="{tmpl_var name='refresh_url'}">{tmpl_var name='ms_refresh_view'}</button></div>
+<p><button type="button" class="btn btn-default formbutton-success" data-submit-form="pageForm" data-form-action="sites/modsecurity_diagnostics.php?_ms_action=collect">{tmpl_var name='ms_collect'}</button></p>
+<tmpl_if name="pending"><div class="alert alert-info">{tmpl_var name='ms_collection_pending'}</div></tmpl_if>
+<tmpl_if name="result_message"><div class="alert alert-danger">{tmpl_var name='result_message'}</div></tmpl_if>
+<p class="help-block">{tmpl_var name='ms_diagnostics_help'}</p>
+<tmpl_if name="truncated"><div class="alert alert-info">{tmpl_var name='ms_truncated'}</div></tmpl_if>
+<div class="table-wrapper"><table class="table"><thead class="dark"><tr><th>{tmpl_var name='ms_rule_id'}</th><th>{tmpl_var name='ms_path_contains'}</th><th>{tmpl_var name='ms_blocked_filter'}</th><th></th></tr><tr><td><input class="form-control" name="rule_id" inputmode="numeric" value="{tmpl_var name='filter_id'}" aria-label="{tmpl_var name='ms_rule_id'}"></td><td><input class="form-control" name="path" value="{tmpl_var name='filter_path'}" aria-label="{tmpl_var name='ms_path_contains'}"></td><td><label><input type="checkbox" name="blocked" value="1"<tmpl_if name="blocked"> checked</tmpl_if>> {tmpl_var name='ms_blocked_only'}</label></td><td><button type="button" class="btn btn-default formbutton-default" data-ms-filter>{tmpl_var name='ms_filter'}</button></td></tr></thead></table></div>
+<tmpl_loop name="events">
+<div class="panel panel-default"><div class="panel-heading"><strong><tmpl_if name="blocked">{tmpl_var name='ms_blocked_event'}<tmpl_else>{tmpl_var name='ms_warning_event'}</tmpl_if> · {tmpl_var name='uri'}</strong></div><div class="panel-body">
+<p>{tmpl_var name='time'} · {tmpl_var name='hostname'}<br>unique_id: <code>{tmpl_var name='unique_id'}</code></p>
+<tmpl_if name="summary_only"><div class="alert alert-warning">{tmpl_var name='ms_summary_help'}</div><tmpl_else><p>{tmpl_var name='ms_detection_rules'} <strong>{tmpl_var name='detection_ids'}</strong>{tmpl_var name='ms_verify_false_positive'}</p></tmpl_if>
+<div class="table-wrapper"><table class="table"><thead class="dark"><tr><th>ID</th><th>{tmpl_var name='ms_type'}</th><th>{tmpl_var name='ms_severity'}</th><th>{tmpl_var name='ms_message'}</th></tr></thead><tbody><tmpl_loop name="rules"><tr><td>{tmpl_var name='id'}</td><td><tmpl_if name="summary">{tmpl_var name='ms_summary'}<tmpl_else>{tmpl_var name='ms_detection'}</tmpl_if></td><td>{tmpl_var name='severity'}</td><td>{tmpl_var name='message'}</td></tr></tmpl_loop></tbody></table></div>
+</div></div>
+</tmpl_loop>
+<tmpl_if name="empty_result"><div class="alert alert-info">{tmpl_var name='ms_empty_result'}</div></tmpl_if>

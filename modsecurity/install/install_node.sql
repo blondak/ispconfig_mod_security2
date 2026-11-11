@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS modsecurity_config (domain_id int unsigned NOT NULL, server_id int unsigned NOT NULL, revision int unsigned NOT NULL DEFAULT 1, config_json mediumtext NOT NULL, policy_json text NOT NULL, updated_by varchar(255) NOT NULL, updated_at datetime NOT NULL, PRIMARY KEY(domain_id), KEY(server_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE IF NOT EXISTS modsecurity_diagnostic_request (domain_id int unsigned NOT NULL, server_id int unsigned NOT NULL, revision int unsigned NOT NULL, requested_at datetime NOT NULL, requested_by varchar(255) NOT NULL, PRIMARY KEY(domain_id), KEY(server_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+ALTER TABLE client ADD COLUMN IF NOT EXISTS limit_modsecurity enum('n','y') NOT NULL DEFAULT 'n';
+ALTER TABLE client_template ADD COLUMN IF NOT EXISTS limit_modsecurity enum('n','y') NOT NULL DEFAULT 'n';
+CREATE TABLE IF NOT EXISTS modsecurity_server_config (server_id int unsigned NOT NULL, revision int unsigned NOT NULL DEFAULT 1, config_json mediumtext NOT NULL, updated_by varchar(255) NOT NULL, updated_at datetime NOT NULL, PRIMARY KEY(server_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

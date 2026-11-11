@@ -1,0 +1,35 @@
+<link rel="stylesheet" href="sites/modsecurity.css">
+<div id="modsecurity-site" data-discard-confirm="{tmpl_var name='ms_discard_changes'}">
+<div class="page-header"><h1>ModSecurity<tmpl_if name="has_server"> · {tmpl_var name='server_name'}</tmpl_if></h1></div>
+<tmpl_if name="has_server">
+<div class="content-tab-wrapper"><ul class="nav nav-tabs">
+<tmpl_loop name="server_tabs"><li><a href="#" data-load-content="{tmpl_var name='url'}">{tmpl_var name='title'}</a></li></tmpl_loop>
+<li class="active"><a href="#" data-load-content="{tmpl_var name='settings_url'}">ModSecurity</a></li></ul>
+<div class="tab-content"><div class="tab-pane active fade in">
+<div class="alert alert-{tmpl_var name='status_class'} ms-status-bar"><span>{tmpl_var name='ms_status'} <strong>{tmpl_var name='status_label'}</strong> · {tmpl_var name='ms_desired_revision'} {tmpl_var name='revision'} · {tmpl_var name='ms_applied_revision'} {tmpl_var name='applied_revision'}</span><button type="button" class="btn btn-default btn-sm" data-load-content="{tmpl_var name='settings_url'}">{tmpl_var name='ms_refresh_status'}</button></div>
+<tmpl_if name="error"><div class="alert alert-danger">{tmpl_var name='error'}</div></tmpl_if>
+<tmpl_if name="status_message"><div class="alert alert-danger">{tmpl_var name='status_message'}</div></tmpl_if>
+<div class="alert alert-info">{tmpl_var name='ms_server_help'}</div>
+<input type="hidden" name="server_id" value="{tmpl_var name='server_id'}"><input type="hidden" name="revision" value="{tmpl_var name='revision'}"><input type="hidden" name="_ms_action" value="save"><input type="hidden" name="_csrf_id" value="{tmpl_var name='csrf_id'}"><input type="hidden" name="_csrf_key" value="{tmpl_var name='csrf_key'}">
+<div class="form-group"><label class="col-sm-3 control-label" for="ms-mode">{tmpl_var name='ms_mode'}</label><div class="col-sm-6"><select class="form-control" name="mode" id="ms-mode"><tmpl_loop name="modes"><option value="{tmpl_var name='value'}"<tmpl_if name="selected"> selected</tmpl_if>>{tmpl_var name='label'}</option></tmpl_loop></select></div></div>
+<div class="form-group"><label class="col-sm-3 control-label">{tmpl_var name='ms_website_overrides'}</label><div class="col-sm-9"><div class="checkbox"><label><input type="checkbox" name="allow_override" value="1"<tmpl_if name="allow_override"> checked</tmpl_if>> {tmpl_var name='ms_allow_website_overrides'}</label></div></div></div>
+<tmpl_loop name="body_limits"><div class="form-group"><label class="col-sm-3 control-label" for="ms-{tmpl_var name='name'}">{tmpl_var name='label'}</label><div class="col-sm-9"><div class="ms-limit-control"><label class="checkbox-inline"><input type="checkbox" name="override_{tmpl_var name='name'}" value="1" data-ms-limit-for="ms-{tmpl_var name='name'}"<tmpl_if name="override"> checked</tmpl_if>> {tmpl_var name='ms_change_limit'}</label><div class="input-group ms-limit-value"><input class="form-control" id="ms-{tmpl_var name='name'}" name="{tmpl_var name='name'}" type="number" min="0.000001" max="1024" step="any" value="{tmpl_var name='value'}" placeholder="{tmpl_var name='ms_server_settings'}"<tmpl_if name="override"> required<tmpl_else> disabled</tmpl_if>><span class="input-group-addon">MiB</span></div></div></div></div></tmpl_loop>
+<div class="clear"><div class="right"><button type="button" class="btn btn-default formbutton-success" data-submit-form="pageForm" data-form-action="admin/modsecurity.php">{tmpl_var name='ms_save_retry'}</button></div></div>
+</div></div></div>
+<tmpl_else>
+<p>{tmpl_var name='ms_select_server'}</p><div class="table-wrapper"><table class="table"><thead class="dark"><tr><th>{tmpl_var name='ms_server'}</th></tr></thead><tbody><tmpl_loop name="server_list"><tr><td><a href="#" data-load-content="admin/modsecurity.php?server_id={tmpl_var name='server_id'}">{tmpl_var name='server_name'}</a></td></tr></tmpl_loop></tbody></table></div>
+</tmpl_if>
+</div>
+<script>
+(function() {
+    var root=jQuery('#modsecurity-site');
+    root.find('[data-load-content]').on('click.modsecurity',function(e) {
+        e.preventDefault();e.stopPropagation();
+        if(ISPConfig.pageFormChanged && !window.confirm(root.attr('data-discard-confirm'))) return;
+        ISPConfig.loadContent(jQuery(this).attr('data-load-content'));
+    });
+    root.find('[data-ms-limit-for]').on('change.modsecurity',function() {
+        var toggle=jQuery(this);root.find('#'+toggle.attr('data-ms-limit-for')).prop('disabled',!toggle.prop('checked')).prop('required',toggle.prop('checked'));
+    });
+})();
+</script>

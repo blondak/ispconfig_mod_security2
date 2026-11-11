@@ -1,0 +1,35 @@
+/* Layout only; tab colors, borders and typography come from the ISPConfig theme. */
+#modsecurity-site .ms-subtabs {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+#modsecurity-site .ms-subtab-content {
+    display: flow-root;
+    padding: 20px 15px;
+}
+#modsecurity-site .ms-status-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+#modsecurity-site .ms-status-bar > .btn {
+    flex-shrink: 0;
+}
+
+#modsecurity-site .ms-limit-control {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+#modsecurity-site .ms-limit-control .checkbox-inline {
+    margin: 0;
+    padding-top: 0;
+}
+#modsecurity-site .ms-limit-value {
+    width: 220px;
+    max-width: 100%;
+}

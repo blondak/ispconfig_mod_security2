@@ -1,0 +1,35 @@
+<div class="alert alert-{tmpl_var name='status_class'} ms-status-bar" role="status"><span>{tmpl_var name='ms_status'} <strong>{tmpl_var name='status_label'}</strong> · {tmpl_var name='ms_desired_revision'} {tmpl_var name='revision'} · {tmpl_var name='ms_applied_revision'} {tmpl_var name='applied_revision'}</span>
+    <button type="button" class="btn btn-default btn-sm" data-load-content="{tmpl_var name='settings_url'}">{tmpl_var name='ms_refresh_status'}</button>
+</div>
+<tmpl_if name="status_message"><div class="alert alert-danger">{tmpl_var name='status_message'}</div></tmpl_if>
+<input type="hidden" name="domain_id" value="{tmpl_var name='domain_id'}">
+<input type="hidden" name="revision" value="{tmpl_var name='revision'}">
+<input type="hidden" name="_ms_action" value="save">
+<input type="hidden" name="_csrf_id" value="{tmpl_var name='csrf_id'}">
+<input type="hidden" name="_csrf_key" value="{tmpl_var name='csrf_key'}">
+<div data-ms-settings>
+<tmpl_if name="is_admin">
+<p class="fieldset-legend">{tmpl_var name='ms_admin_policy'}</p>
+<div class="form-group"><label class="col-sm-3 control-label">{tmpl_var name='ms_client_management'}</label><div class="col-sm-9"><p class="form-control-static"><tmpl_if name="policy_enabled">{tmpl_var name='ms_client_allowed'}<tmpl_else>{tmpl_var name='ms_client_denied'}</tmpl_if><tmpl_if name="owner_client_id"> · <a href="#" data-capp="client" data-ms-client-limits="{tmpl_var name='owner_client_id'}">{tmpl_var name='ms_edit_client_limits'}</a></tmpl_if></p></div></div>
+<div class="form-group"><label class="col-sm-3 control-label">{tmpl_var name='ms_disable_protection'}</label><div class="col-sm-9"><div class="checkbox"><label><input type="checkbox" name="allow_disable"<tmpl_if name="policy_disable"> checked</tmpl_if>> {tmpl_var name='ms_allow_disable'}</label></div></div></div>
+<tmpl_loop name="policy_limits"><div class="form-group"><label class="col-sm-3 control-label" for="ms-{tmpl_var name='name'}">{tmpl_var name='label'} (MiB)</label><div class="col-sm-3"><input class="form-control" id="ms-{tmpl_var name='name'}" name="{tmpl_var name='name'}" type="number" min="0.000001" max="1024" step="any" value="{tmpl_var name='value'}"></div></div></tmpl_loop>
+</tmpl_if>
+<p class="fieldset-legend">{tmpl_var name='ms_protection_settings'}</p>
+<tmpl_unless name="can_edit"><div class="alert alert-info">{tmpl_var name='ms_readonly'}</div></tmpl_unless>
+<tmpl_if name="server_mode_locked"><div class="alert alert-info">{tmpl_var name='ms_server_mode_forced'}</div></tmpl_if>
+<fieldset<tmpl_unless name="can_edit"> disabled</tmpl_unless>>
+<div class="form-group"><label class="col-sm-3 control-label" for="ms-mode">{tmpl_var name='ms_mode'}</label><div class="col-sm-6"><select class="form-control" name="mode" id="ms-mode"<tmpl_if name="server_mode_locked"> disabled</tmpl_if>><tmpl_loop name="modes"><option value="{tmpl_var name='value'}"<tmpl_if name="selected"> selected</tmpl_if><tmpl_if name="disabled"> disabled</tmpl_if>>{tmpl_var name='label'}</option></tmpl_loop></select></div></div>
+<tmpl_loop name="body_limits"><div class="form-group"><label class="col-sm-3 control-label" for="ms-{tmpl_var name='name'}">{tmpl_var name='label'}</label><div class="col-sm-9"><div class="ms-limit-control">
+<label class="checkbox-inline" for="ms-override-{tmpl_var name='name'}"><input type="checkbox" id="ms-override-{tmpl_var name='name'}" name="override_{tmpl_var name='name'}" value="1" data-ms-limit-for="ms-{tmpl_var name='name'}" aria-controls="ms-{tmpl_var name='name'}"<tmpl_if name="override"> checked</tmpl_if>> {tmpl_var name='ms_change_limit'}</label>
+<div class="input-group ms-limit-value"><input class="form-control" id="ms-{tmpl_var name='name'}" name="{tmpl_var name='name'}" type="number" min="0.000001" max="1024" step="any" value="{tmpl_var name='value'}" placeholder="{tmpl_var name='ms_server_settings'}"<tmpl_if name="override"> required<tmpl_else> disabled</tmpl_if>><span class="input-group-addon">MiB</span></div>
+</div></div></div></tmpl_loop>
+<div class="alert alert-info">{tmpl_var name='ms_settings_help'}</div>
+<p class="fieldset-legend">{tmpl_var name='ms_rule_exclusions'}</p>
+<div class="table-wrapper"><table class="table"><thead class="dark"><tr><th>{tmpl_var name='ms_scope'}</th><th>{tmpl_var name='ms_path'}</th><th>{tmpl_var name='ms_rule_ids'}</th><th>{tmpl_var name='ms_off_url'}</th><th>{tmpl_var name='ms_note'}</th></tr></thead><tbody id="ms-exception-rows">
+<tmpl_loop name="exceptions"><tr data-row-index="{tmpl_var name='index'}"><td><select class="form-control" name="scope[{tmpl_var name='index'}]"><option value="site"<tmpl_if name="site"> selected</tmpl_if>>{tmpl_var name='ms_whole_site'}</option><option value="exact"<tmpl_if name="exact"> selected</tmpl_if>>{tmpl_var name='ms_exact_path'}</option><option value="prefix"<tmpl_if name="prefix"> selected</tmpl_if>>{tmpl_var name='ms_prefix'}</option></select></td><td><input class="form-control" name="path[{tmpl_var name='index'}]" value="{tmpl_var name='path'}" aria-label="{tmpl_var name='ms_url_path'}"></td><td><input class="form-control" name="ids[{tmpl_var name='index'}]" value="{tmpl_var name='ids'}" aria-label="{tmpl_var name='ms_rule_ids'}"></td><td><input type="checkbox" name="off[{tmpl_var name='index'}]" aria-label="{tmpl_var name='ms_disable_url'}"<tmpl_if name="off"> checked</tmpl_if><tmpl_unless name="allow_disable"> disabled</tmpl_unless>></td><td><input class="form-control" name="note[{tmpl_var name='index'}]" value="{tmpl_var name='note'}" aria-label="{tmpl_var name='ms_note'}"></td></tr></tmpl_loop>
+</tbody></table></div>
+<p class="help-block">{tmpl_var name='ms_exclusions_help'}</p>
+<button type="button" class="btn btn-default formbutton-default" data-ms-add>{tmpl_var name='ms_add_exception'}</button>
+<div class="clear"><div class="right"><button type="button" class="btn btn-default formbutton-success" data-submit-form="pageForm" data-form-action="sites/modsecurity.php">{tmpl_var name='ms_save_retry'}</button></div></div>
+</fieldset>
+</div>

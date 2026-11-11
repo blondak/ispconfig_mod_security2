@@ -1,0 +1,53 @@
+name: ispconfig-modsecurity-lab
+x-app: &app
+  build:
+    context: ../..
+    dockerfile: tests/setup/Dockerfile
+  image: ispconfig-modsecurity-lab:0.1.0
+  depends_on:
+    db:
+      condition: service_healthy
+  volumes:
+    - ../../modsecurity:/lab-extension:ro
+    - .:/lab:ro
+  restart: unless-stopped
+services:
+  db:
+    image: mariadb:10.11
+    environment:
+      MARIADB_ROOT_PASSWORD: lab-db-root
+      MARIADB_ROOT_HOST: '%'
+    volumes:
+      - db-data:/var/lib/mysql
+    healthcheck:
+      test: [CMD, healthcheck.sh, --connect, --innodb_initialized]
+      interval: 3s
+      timeout: 3s
+      retries: 40
+  server1:
+    <<: *app
+    hostname: server1.lab.test
+    environment:
+      LAB_SERVER_ID: '1'
+    ports:
+      - '127.0.0.1:18080:80'
+      - '127.0.0.1:18081:8081'
+    healthcheck:
+      test: [CMD, curl, --fail, --silent, http://localhost/login/]
+      interval: 5s
+      timeout: 3s
+      retries: 40
+  server2:
+    <<: *app
+    hostname: server2.lab.test
+    environment:
+      LAB_SERVER_ID: '2'
+    ports:
+      - '127.0.0.1:18082:8081'
+    depends_on:
+      db:
+        condition: service_healthy
+      server1:
+        condition: service_healthy
+volumes:
+  db-data:

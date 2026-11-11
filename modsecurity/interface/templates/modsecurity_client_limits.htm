@@ -1,0 +1,11 @@
+<tmpl_dyninclude name="ms_original_limits">
+<script>
+(function() {
+    // The registry renders extension fields as text in this ISPConfig release.
+    // Use a native checkbox for our boolean field without replacing core templates.
+    var input = jQuery('#limit_modsecurity');
+    if (!input.length || input.attr('type') !== 'text') return;
+    var enabled = input.val() === 'y';
+    input.attr('type','checkbox').val('y').prop('checked',enabled).removeClass('form-control');
+})();
+</script>
