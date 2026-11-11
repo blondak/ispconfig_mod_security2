@@ -1,16 +1,18 @@
 <?php
 class modsecurity_installer extends extension_installer_base {
     public function install() {
+        if(PHP_VERSION_ID<70400) throw new RuntimeException('ModSecurity requires PHP 7.4 or newer.');
         $list=__DIR__.'/file.list';
         if(!is_dir('/usr/local/ispconfig/interface/web/sites')) {
             $lines=file($list,FILE_IGNORE_NEW_LINES);
-            $lines=array_filter($lines,fn($line)=>!str_contains($line,':interface/'));
+            $lines=array_filter($lines,function($line) { return strpos($line,':interface/')===false; });
             if(file_put_contents($list,implode("\n",$lines)."\n")===false) throw new RuntimeException('Cannot prepare the node-only installation.');
         }
         return true;
     }
     public function update() { return $this->install(); }
     public function enable() {
+        if(PHP_VERSION_ID<70400) throw new RuntimeException('ModSecurity requires PHP 7.4 or newer.');
         global $app;
         if(is_dir('/etc/apache2/conf-enabled')) {
             $file='/etc/apache2/conf-enabled/ispconfig-modsecurity.conf';

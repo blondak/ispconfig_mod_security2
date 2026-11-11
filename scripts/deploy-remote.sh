@@ -8,7 +8,9 @@ version=${2:?Missing release version}
 [[ $version =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || exit 1
 base=/usr/local/ispconfig/extensions
 active=$base/modsecurity
-mkdir -p "$base"
+if [[ ! -d $base ]]; then
+    install -d -m 0750 -o root -g ispconfig "$base"
+fi
 exec 9>"$base/.modsecurity-deploy.lock"
 flock -n 9 || { echo 'Another deployment is running' >&2; exit 1; }
 archive=$incoming/modsecurity-$version.tar.gz
@@ -57,8 +59,8 @@ if [[ -d $active ]]; then
 fi
 switched=true
 mv "$stage/modsecurity" "$active"
-chown -R root:root "$active"
-chmod -R u=rwX,go=rX "$active"
+chown -R root:ispconfig "$active"
+chmod -R u=rwX,g=rX,o= "$active"
 php "$active/install/local.php" "$mode"
 /usr/sbin/apache2ctl configtest
 printf 'Deployed ModSecurity %s; previous code: %s\n' "$version" "$backup"

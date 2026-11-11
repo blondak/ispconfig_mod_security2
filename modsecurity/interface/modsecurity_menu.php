@@ -1,10 +1,5 @@
 <?php
-require_once ISPC_LIB_PATH.'/modsecurity/lib/I18n.php';
-// ISPConfig loads menu.d files in module scope. Pages use the native content pane.
-$module['nav'][] = [
-    'title' => 'ModSecurity', 'open' => 1,
-    'items' => [
-        ['title'=>'ModSecurity','target'=>'content','link'=>'sites/modsecurity.php','html_id'=>'modsecurity_settings'],
-        ['title'=>\IspModsecurity\I18n::t('diagnostics_menu'),'target'=>'content','link'=>'sites/modsecurity_diagnostics.php','html_id'=>'modsecurity_diagnostics'],
-    ],
-];
+// Keep this entry point parseable before the PHP 7.4 runtime is loaded.
+require_once ISPC_LIB_PATH.'/modsecurity/lib/Runtime.php';
+if(!\IspModsecurity\Runtime::supported()) return array();
+return require ISPC_LIB_PATH.'/modsecurity/runtime/modsecurity_menu.php';

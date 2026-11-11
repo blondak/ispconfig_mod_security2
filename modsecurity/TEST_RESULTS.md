@@ -67,6 +67,14 @@ Added a Regular expression scope with EN/DE/CZ labels. The user-supplied Livewir
 
 `tests/regex.php`: **29 checks** passed. `tests/setup/regex_settings.php`: **7 HTTP assertions** passed for scope selection, client save/reload, multiple rule IDs, worker application and rejection without revision changes. The Apache suite now has **33 checks**, including valid/invalid Livewire hashes, path anchors, backslash semantics, URL disabling, phase 1 behavior and another vhost's isolation.
 
+## PHP compatibility and layout
+
+Production syntax and the functional unit suite passed under PHP 7.4.33 and 8.2.35. `tests/compatibility.php` adds 9 assertions for empty string boundaries, regex rendering, config application and all three languages. CI now has a separate 7.4/8.2 matrix.
+
+The package source remains root-owned; deployment now follows native extension group permissions (`root:ispconfig`, 0750 directories / 0640 ordinary files). Panel code still loads only regular installed interface copies, and workers still use package code. Existing parent-directory policy is preserved. The standard CGI wrapper's interpreter is version-checked as `ispconfig`; other handlers are reported as not automatically detected. Two disposable-lab fixtures cover warning about CGI PHP 7.3 independently of the CLI version and acceptance of PHP 7.4. The final two-node HTTP suite (23 + 88 + 7 + 29 + 8 assertions) and five online installation/recovery checks passed on PHP 8.2.
+
+Guarded entry points passed 22 checks on actual PHP 7.0: no supported runtime classes loaded, no plugin events/menus registered, cached callbacks remain callable, direct pages return HTTP 503 with EN/DE/CZ explanations, and one warning records the actual PHP version. PHP 7.0 remains unsupported for the functional runtime.
+
 ## Scope and remaining coverage
 
 The lab provisions fixture vhosts instead of running the full hosting stack. Mail/DNS/FTP daemons and systemd are excluded; the systemctl adapter performs a real Apache graceful reload. Full operating-system provisioning/upgrades need a VM.

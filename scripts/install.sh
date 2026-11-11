@@ -16,7 +16,8 @@ or update the ISPConfig ModSecurity extension on this machine.
   --help            Show this help
 
 Installation requires root, Debian 12, ISPConfig >= 3.3.3p2, Apache with
-ModSecurity 2, PHP CLI with mysqli/mbstring/posix, curl and GNU tar.
+ModSecurity 2, PHP >= 7.4 CLI (panel integration needs PHP >= 7.4), mysqli/mbstring/posix, curl and GNU tar.
+PHP 8.2 is recommended on Debian 12.
 Run on the master first, then on each web node using the same version.
 After the first installation, Resync websites in ISPConfig and sign in again.
 HELP
@@ -36,18 +37,20 @@ done
 for command in curl php tar sha256sum mktemp rm bash; do
     command -v "$command" >/dev/null || fail "Required command not found: $command"
 done
+php -r 'if(PHP_VERSION_ID<70400) { fwrite(STDERR,"PHP 7.4 or newer is required.\n");exit(1); }'
 if [[ $check_only == false ]]; then
     [[ $(id -u) == 0 ]] || fail 'Run installation as root, or use --check to verify downloads only'
     [[ -f /etc/os-release ]] || fail 'Cannot identify the operating system'
     # shellcheck disable=SC1091
     source /etc/os-release
     [[ ${ID:-} == debian && ${VERSION_ID:-} == 12 ]] || fail 'This installer targets Debian 12'
-    for command in flock find chown chmod mv cp date; do
+    for command in flock find chown chmod mv cp date grep sed runuser; do
         command -v "$command" >/dev/null || fail "Required command not found: $command"
     done
     [[ -f /usr/local/ispconfig/server/lib/config.inc.php && -f /usr/local/ispconfig/server/lib/app.inc.php ]] || fail 'ISPConfig is not installed at /usr/local/ispconfig'
     php <<'PHP'
 <?php
+if(PHP_VERSION_ID<70400) { fwrite(STDERR,"PHP 7.4 or newer is required for the installer.\n");exit(1); }
 foreach(['mysqli','mbstring','posix'] as $module) {
     if(!extension_loaded($module)) { fwrite(STDERR,"Required PHP extension not found: $module\n");exit(1); }
 }
@@ -61,6 +64,21 @@ PHP
     [[ -x /usr/sbin/apache2ctl ]] || fail 'Apache is required on this target'
     modules=$(/usr/sbin/apache2ctl -M 2>&1) || fail 'Apache configuration test failed'
     [[ $modules == *security2_module* ]] || fail 'Enable the Apache security2 module before installing'
+    # Check the actual interpreter used by the standard ISPConfig CGI wrapper.
+    # Never execute the wrapper as root: it starts the web handler and may be custom.
+    panel_wrapper=/var/www/php-fcgi-scripts/ispconfig/.php-fcgi-starter
+    panel_vhost=/etc/apache2/sites-enabled/000-ispconfig.vhost
+    if [[ $modules == *fcgid_module* && -r $panel_wrapper && -r $panel_vhost ]] && grep -Fq "$panel_wrapper" "$panel_vhost"; then
+        panel_binary=$(sed -nE 's|^[[:space:]]*exec[[:space:]]+(/[a-zA-Z0-9_./+-]+).*|\1|p' "$panel_wrapper")
+        [[ $panel_binary =~ ^/[a-zA-Z0-9_./+-]+$ && -x $panel_binary ]] || fail 'Cannot identify the panel CGI interpreter; inspect its wrapper'
+        panel_output=$(runuser -u ispconfig -- "$panel_binary" -n -v </dev/null) || fail 'Cannot query the panel CGI interpreter as ispconfig'
+        panel_version=$(printf '%s\n' "$panel_output" | sed -nE 's/^PHP ([0-9]+\.[0-9]+\.[0-9]+).*/\1/p')
+        [[ $panel_version =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || fail 'Cannot identify the panel CGI PHP version'
+        php -r 'if(version_compare($argv[1],"7.4.0","<")) { fwrite(STDERR,"WARNING: Panel PHP 7.4 or newer is required; detected ".$argv[1].". Panel integration will remain disabled.\n"); }' "$panel_version"
+        printf 'Panel CGI PHP %s detected (%s)\n' "$panel_version" "$panel_binary"
+    else
+        printf 'Panel PHP is not automatically detected for this handler; verify PHP >= 7.4 separately.\n'
+    fi
 fi
 umask 077
 work=$(mktemp -d /tmp/ispconfig-modsecurity.XXXXXXXX)

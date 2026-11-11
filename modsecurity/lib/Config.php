@@ -1,5 +1,6 @@
 <?php
 namespace IspModsecurity;
+require_once __DIR__.'/Compat.php';
 require_once __DIR__.'/I18n.php';
 final class Config {
     public static function defaults(): array {
@@ -22,8 +23,8 @@ final class Config {
             if (!is_array($r) || !in_array($r['scope'] ?? '', ['site','exact','prefix','regex'], true)) throw new \InvalidArgumentException(\IspModsecurity\I18n::t('invalid_scope'));
             $path = (string)($r['path'] ?? '');
             if ($r['scope'] === 'regex') self::validateRegex($path);
-            if (in_array($r['scope'], ['exact','prefix'], true) && (!preg_match('#^/[A-Za-z0-9_./~+@=-]*$#D', $path) || strlen($path)>1024 || str_contains($path,'..') || str_contains($path,'%'))) throw new \InvalidArgumentException(\IspModsecurity\I18n::t('invalid_path'));
-            if ($r['scope']==='prefix' && !str_ends_with($path,'/')) throw new \InvalidArgumentException(\IspModsecurity\I18n::t('invalid_prefix'));
+            if (in_array($r['scope'], ['exact','prefix'], true) && (!preg_match('#^/[A-Za-z0-9_./~+@=-]*$#D', $path) || strlen($path)>1024 || \IspModsecurity\Compat::contains($path,'..') || \IspModsecurity\Compat::contains($path,'%'))) throw new \InvalidArgumentException(\IspModsecurity\I18n::t('invalid_path'));
+            if ($r['scope']==='prefix' && !\IspModsecurity\Compat::endsWith($path,'/')) throw new \InvalidArgumentException(\IspModsecurity\I18n::t('invalid_prefix'));
             $off = !empty($r['off']);
             if ($off && (!$admin && empty($policy['allow_disable']))) throw new \InvalidArgumentException(\IspModsecurity\I18n::t('url_disable_denied'));
             if ($off && $r['scope']==='site') throw new \InvalidArgumentException(\IspModsecurity\I18n::t('use_mode'));
@@ -36,7 +37,7 @@ final class Config {
         return ['mode'=>$c['mode'],'body_limit'=>$c['body_limit'],'nofiles_limit'=>$c['nofiles_limit'],'exceptions'=>$rows];
     }
     private static function validateRegex(string $pattern): void {
-        if(strlen($pattern)>1024 || !str_starts_with($pattern,'^/') || preg_match('/[^\x21-\x7e]|"/',$pattern)) {
+        if(strlen($pattern)>1024 || !\IspModsecurity\Compat::startsWith($pattern,'^/') || preg_match('/[^\x21-\x7e]|"/',$pattern)) {
             throw new \InvalidArgumentException(I18n::t('invalid_regex_path'));
         }
         // A control-character delimiter cannot occur in an accepted pattern, so no

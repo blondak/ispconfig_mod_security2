@@ -1,4 +1,5 @@
 <?php
+if(PHP_VERSION_ID<70400) { fwrite(STDERR,"ModSecurity requires PHP 7.4 or newer.\n");exit(1); }
 if(PHP_SAPI!=='cli' || posix_geteuid()!==0) exit("Run as root using CLI.\n");
 chdir('/usr/local/ispconfig/server');
 require 'lib/config.inc.php';

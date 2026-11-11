@@ -7,6 +7,30 @@ on:
 permissions:
   contents: read
 jobs:
+  unsupported-php:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Unsupported PHP disables the extension without parsing its runtime
+        run: docker run --rm --network none --mount type=bind,src="$PWD",dst=/work,readonly php:7.0.33-cli php /work/tests/unsupported_runtime.php
+  php-compatibility:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['7.4.33', '8.2']
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Runtime syntax and functional checks
+        env:
+          PHP_IMAGE: php:${{ matrix.php }}-cli
+        run: docker run --rm --network none --mount type=bind,src="$PWD",dst=/work,readonly --entrypoint bash "$PHP_IMAGE" /work/scripts/check-compat.sh
   tests:
     runs-on: ubuntu-latest
     timeout-minutes: 25

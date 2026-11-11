@@ -52,7 +52,7 @@ A server change regenerates its affected snippets and performs one configtest/re
 
 ## Installation
 
-Use PHP 8.2 for the panel and the ISPConfig worker/CLI. The extension uses PHP 8 features; the panel CGI/FPM interpreter can differ from the command-line default.
+The extension supports PHP **7.4 and newer**; PHP **8.2** is recommended on Debian 12 for both panel and worker/CLI. The panel CGI/FPM interpreter can differ from the command-line default. With older PHP, guarded entry points leave the extension inactive and log a warning; direct settings/diagnostics pages return an explanatory HTTP 503 response in EN/DE/CZ. See the [supported versions and installation layout](docs/ARCHITECTURE.md).
 
 The [online installer](docs/INSTALLATION.md) can download, verify and install a published release automatically. For manual installation:
 
@@ -89,6 +89,7 @@ Raw lines, client IPs, referers and request bodies are not copied into the snaps
 
 ## Documentation
 
+- [Runtime compatibility and layout](docs/ARCHITECTURE.md): PHP requirements, installed paths and ownership.
 - [Online installation and updates](docs/INSTALLATION.md): verified downloads and installation on each node.
 - [Releases and automatic deployment](docs/DEPLOYMENT.md): GitHub Actions, release publishing, SSH configuration and recovery.
 - [Development and testing](docs/DEVELOPMENT.md): local checks, the two-node lab and release packaging.

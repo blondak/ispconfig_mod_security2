@@ -29,6 +29,7 @@ cp "$FIXTURE_DIR/$file" "$output"
 MOCK
 chmod 755 "$work/bin/curl"
 export PATH="$work/bin:$PATH" FIXTURE_DIR="$work/release"
+bash /lab/panel_php.sh "$installer"
 before=$(sha256sum "$active/lib/Config.php")
 # Zero is the current schema version; the deployer must retain the marker.
 printf '0\n' > "$active/dbversion"
@@ -51,4 +52,4 @@ grep -q 'restoring previous code' "$work/rejected"
 ! grep -q 'Expected online installer failure' "$active/install/installer.php"
 /usr/sbin/apache2ctl configtest
 echo 'PASS online installer restores working code after failed installation'
-echo '3 online installation checks passed in the two-node lab'
+echo '5 online installation checks passed in the two-node lab'

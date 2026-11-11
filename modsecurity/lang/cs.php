@@ -1,6 +1,7 @@
 <?php
 // ModSecurity extension language catalog.
 return [
+    'unsupported_php'=>'Nastavení ModSecurity není dostupné: je potřeba PHP 7.4 nebo novější. ISPConfig můžete dále používat.',
     'settings'=>'Nastavení',
     'diagnostics'=>'Diagnostika',
     'diagnostics_menu'=>'Diagnostika ModSecurity',

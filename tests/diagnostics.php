@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__.'/../modsecurity/lib/Compat.php';
 require __DIR__.'/../modsecurity/lib/Diagnostics.php';
 use IspModsecurity\Diagnostics;
 $count=0;
@@ -21,7 +22,7 @@ $e=Diagnostics::parse(lineFor(941100,'message with \\"quoted\\" content'));
 check($e[0]['rules'][0]['message']==='message with "quoted" content','escaped quotes parsed');
 $e=Diagnostics::parse(lineFor(941100,'payload <script>alert(1)</script>','x',false,'/edit?token=secret'));
 check($e[0]['uri']==='/edit','query string excluded from diagnostic URL');
-check(!str_contains(json_encode($e),'145.14.232.132'),'client IP not copied into result');
+check(!\IspModsecurity\Compat::contains(json_encode($e),'145.14.232.132'),'client IP not copied into result');
 $without=preg_replace('/ \[unique_id "[^"]+"\]/','',lineFor(941100,'x'));
 check(count(Diagnostics::parse($without."\n".$without))===2,'missing unique IDs are not merged');
 check(Diagnostics::parse('PHP Fatal error: something')===[],'other errors ignored');

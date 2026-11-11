@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 cd "$(dirname "$0")/.."
-for test in run diagnostics diagnostic_module hooks store access i18n server_config regex; do php "tests/$test.php"; done
+for test in run diagnostics diagnostic_module hooks store access i18n server_config regex compatibility; do php "tests/$test.php"; done
 source_dir=${1:-/tmp/ispconfig3_install}
 if [[ ! -f $source_dir/server/lib/classes/tpl.inc.php ]]; then
     mkdir -p "$source_dir"

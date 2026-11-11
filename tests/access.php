@@ -1,11 +1,12 @@
 <?php
+require_once __DIR__.'/../modsecurity/lib/Compat.php';
 require __DIR__.'/../modsecurity/lib/Access.php';
 use IspModsecurity\Access;
 $app=new stdClass();
 $app->db=new class {
  public $clients=[];
  public function queryOneRecord($sql,...$args) {
-  if(str_contains($sql,'sys_group')) return ['client_id'=>1];
+  if(\IspModsecurity\Compat::contains($sql,'sys_group')) return ['client_id'=>1];
   return $this->clients[$args[0]]??null;
  }
 };

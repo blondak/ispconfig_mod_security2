@@ -1,8 +1,11 @@
 d:lib:interface/lib/modsecurity
 d:lib:interface/lib/modsecurity/lib
 d:lang:interface/lib/modsecurity/lang
+d:interface/runtime:interface/lib/modsecurity/runtime
+c:lib/Runtime.php:interface/lib/modsecurity/lib/Runtime.php
 c:lib/Access.php:interface/lib/modsecurity/lib/Access.php
 c:lib/Apply.php:interface/lib/modsecurity/lib/Apply.php
+c:lib/Compat.php:interface/lib/modsecurity/lib/Compat.php
 c:lib/Config.php:interface/lib/modsecurity/lib/Config.php
 c:lib/Diagnostics.php:interface/lib/modsecurity/lib/Diagnostics.php
 c:lib/I18n.php:interface/lib/modsecurity/lib/I18n.php
@@ -30,3 +33,12 @@ c:interface/modsecurity_server.php:interface/web/admin/modsecurity.php
 c:interface/modsecurity_server_plugin.inc.php:interface/lib/plugins/modsecurity_server_plugin.inc.php
 c:interface/modsecurity_admin_menu.php:interface/web/admin/lib/menu.d/modsecurity.menu.php
 c:interface/templates/modsecurity_server.htm:interface/web/admin/templates/modsecurity_server.htm
+c:interface/runtime/modsecurity_link_plugin.inc.php:interface/lib/modsecurity/runtime/modsecurity_link_plugin.inc.php
+c:interface/runtime/modsecurity_client_plugin.inc.php:interface/lib/modsecurity/runtime/modsecurity_client_plugin.inc.php
+c:interface/runtime/modsecurity_server_plugin.inc.php:interface/lib/modsecurity/runtime/modsecurity_server_plugin.inc.php
+c:interface/runtime/modsecurity.php:interface/lib/modsecurity/runtime/modsecurity.php
+c:interface/runtime/modsecurity_diagnostics.php:interface/lib/modsecurity/runtime/modsecurity_diagnostics.php
+c:interface/runtime/modsecurity_server.php:interface/lib/modsecurity/runtime/modsecurity_server.php
+c:interface/runtime/modsecurity_menu.php:interface/lib/modsecurity/runtime/modsecurity_menu.php
+c:interface/runtime/modsecurity_admin_menu.php:interface/lib/modsecurity/runtime/modsecurity_admin_menu.php
+c:interface/runtime/modsecurity_limits.php:interface/lib/modsecurity/runtime/modsecurity_limits.php

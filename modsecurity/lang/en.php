@@ -1,6 +1,7 @@
 <?php
 // ModSecurity extension language catalog.
 return [
+    'unsupported_php'=>'ModSecurity settings are unavailable: PHP 7.4 or newer is required. ISPConfig can still be used.',
     'settings'=>'Settings',
     'diagnostics'=>'Diagnostics',
     'diagnostics_menu'=>'ModSecurity diagnostics',

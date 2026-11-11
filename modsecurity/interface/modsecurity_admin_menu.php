@@ -1,6 +1,5 @@
 <?php
-if(($_SESSION['s']['user']['typ']??'')==='admin') $module['nav'][]=[
-    'title'=>'ModSecurity','open'=>1,'items'=>[
-        ['title'=>'ModSecurity','target'=>'content','link'=>'admin/modsecurity.php','html_id'=>'modsecurity_servers'],
-    ],
-];
+// Keep this entry point parseable before the PHP 7.4 runtime is loaded.
+require_once ISPC_LIB_PATH.'/modsecurity/lib/Runtime.php';
+if(!\IspModsecurity\Runtime::supported()) return array();
+return require ISPC_LIB_PATH.'/modsecurity/runtime/modsecurity_admin_menu.php';

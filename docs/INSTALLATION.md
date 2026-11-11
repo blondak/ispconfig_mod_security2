@@ -9,7 +9,7 @@ The release must include `install.sh`, `install.sh.sha256`, `deploy-remote.sh`, 
 - Debian 12 and an existing ISPConfig installation at `/usr/local/ispconfig`, version 3.3.3p2 or newer. Tested with 3.3.3p2.
 - Apache with the `security2` module enabled and the intended ruleset already configured.
 - Bash, curl, CA certificates, GNU tar, sha256sum, flock and PHP CLI with mysqli, mbstring and posix.
-- Use PHP 8.2 for both the panel and worker/CLI. Checking `php -v` alone does not identify the panel CGI/FPM interpreter.
+- PHP 7.4 or newer for both panel and worker/CLI; PHP 8.2 is recommended on Debian 12. Checking `php -v` alone does not identify the panel CGI/FPM interpreter. The standard mod_fcgid wrapper is checked separately; an older panel PHP produces a warning and panel integration stays disabled. Custom/FPM handlers need a separate runtime check. See [ARCHITECTURE.md](ARCHITECTURE.md).
 - Root access for installation; `--check` does not require root.
 
 The installer installs this extension. It does not install ISPConfig, Apache or ModSecurity packages. Existing ISPConfig configuration supplies database connections and determines the master/node SQL scope; database credentials are not passed on the command line.
