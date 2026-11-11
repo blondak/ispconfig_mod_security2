@@ -10,6 +10,7 @@ stage=$(mktemp -d)
 trap 'rm -rf "$stage"' EXIT
 cp -a modsecurity "$stage/modsecurity"
 cp README.md LICENSE "$stage/modsecurity/"
+cp -a docs "$stage/modsecurity/docs"
 # Runtime state never belongs in a release; deployment preserves the schema marker.
 rm -f "$stage/modsecurity/dbversion"
 epoch=${SOURCE_DATE_EPOCH:-0}

@@ -1,0 +1,26 @@
+# Development and tests
+
+```sh
+./scripts/check.sh
+
+docker build -f tests/apache/Dockerfile -t ispconfig-modsecurity-test .
+docker run --rm ispconfig-modsecurity-test
+
+cd tests/setup
+docker compose up -d --build
+docker compose run --rm --no-deps --entrypoint php server1 /lab/smoke.php
+docker compose run --rm --no-deps --entrypoint php server1 /lab/server_settings.php
+docker compose run --rm --no-deps --entrypoint php server1 /lab/stale_session.php
+```
+
+The disposable [two-node lab](../tests/setup/README.md) provides an administrator, two clients, two websites and actual queue replication. It runs the components needed by this extension; full mail/DNS/FTP provisioning and systemd require separate VM testing. See [TEST_RESULTS.md](../TEST_RESULTS.md) for completed checks and remaining coverage.
+
+Build a distributable archive with `./scripts/package-release.sh 0.1.0`. Build timestamps default to zero for reproducibility; `SOURCE_DATE_EPOCH` can set an explicit timestamp.
+
+## Commit attribution
+
+Include this trailer in commits made with OpenAI Codex assistance:
+
+```text
+Co-authored-by: Codex <codex@openai.com>
+```
